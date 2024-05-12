@@ -47,6 +47,14 @@ async function run() {
             res.send(result)
         })
 
+        // post blog by author
+        app.post('/blog', async (req, res) =>{
+            const blogData = req.body
+            const result = await blogsCollection.insertOne(blogData)
+
+            res.send(result)
+        })
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
@@ -68,3 +76,4 @@ app.get('/', (req, res) => {
 app.listen(port, () =>
     console.log(`Server running on port ${port}`)
 )
+
