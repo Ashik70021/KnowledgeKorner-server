@@ -32,6 +32,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         const blogsCollection = client.db('KnowledgeKorner').collection('blogs')
+        const commentsCollection = client.db('KnowledgeKorner').collection('comments')
          
         // Get all blogs data from db
         app.get('/blogs', async (req, res) =>{
@@ -51,6 +52,13 @@ async function run() {
         app.post('/blog', async (req, res) =>{
             const blogData = req.body
             const result = await blogsCollection.insertOne(blogData)
+
+            res.send(result)
+        })
+        // post comment by user
+        app.post('/comment', async (req, res) =>{
+            const comment = req.body
+            const result = await commentsCollection.insertOne(comment)
 
             res.send(result)
         })
