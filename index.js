@@ -33,6 +33,7 @@ async function run() {
     try {
         const blogsCollection = client.db('KnowledgeKorner').collection('blogs')
         const commentsCollection = client.db('KnowledgeKorner').collection('comments')
+        const wishlistCollection = client.db('KnowledgeKorner').collection('wishlist')
 
         // Get all blogs data from db
         app.get('/blogs', async (req, res) => {
@@ -55,6 +56,7 @@ async function run() {
 
             res.send(result)
         })
+
         // post comment by user
         app.post('/comment', async (req, res) => {
             const comment = req.body
@@ -62,9 +64,35 @@ async function run() {
 
             res.send(result)
         })
+
         // get comments by user
         app.get('/comments', async (req, res) => {
             const result = await commentsCollection.find().toArray()
+            res.send(result)
+        })
+
+        // post wishlist 
+        app.post('/wishlist', async (req, res) => {
+            const wishdata = req.body
+            const result = await wishlistCollection.insertOne(wishdata)
+            res.send(result)
+        })
+
+        // Update blog
+        app.put("/updateBlog/:id", async(req,res)=>{
+            console.log(req.params.id)
+            const query = {_id: new ObjectId(req.params.id)};
+            const data = {
+                $set: {
+                    blog_title : req.body.blog_title ,
+                    category: req.body.category,
+                    image: req.body.image,
+                    description: req.body.description,
+        
+                }
+            }
+            const result = await blogsCollection.updateOne(query, data);
+            console.log(result)
             res.send(result)
         })
 
