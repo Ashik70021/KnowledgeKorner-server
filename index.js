@@ -33,33 +33,38 @@ async function run() {
     try {
         const blogsCollection = client.db('KnowledgeKorner').collection('blogs')
         const commentsCollection = client.db('KnowledgeKorner').collection('comments')
-         
+
         // Get all blogs data from db
-        app.get('/blogs', async (req, res) =>{
+        app.get('/blogs', async (req, res) => {
             const result = await blogsCollection.find().toArray()
             res.send(result)
         })
 
         // Get single blog data by id
-        app.get('/blog/:id', async (req, res) =>{
+        app.get('/blog/:id', async (req, res) => {
             const id = req.params.id
-            const query = {_id: new ObjectId(id)}
+            const query = { _id: new ObjectId(id) }
             const result = await blogsCollection.findOne(query)
             res.send(result)
         })
 
         // post blog by author
-        app.post('/blog', async (req, res) =>{
+        app.post('/blog', async (req, res) => {
             const blogData = req.body
             const result = await blogsCollection.insertOne(blogData)
 
             res.send(result)
         })
         // post comment by user
-        app.post('/comment', async (req, res) =>{
+        app.post('/comment', async (req, res) => {
             const comment = req.body
             const result = await commentsCollection.insertOne(comment)
 
+            res.send(result)
+        })
+        // get comments by user
+        app.get('/comments', async (req, res) => {
+            const result = await commentsCollection.find().toArray()
             res.send(result)
         })
 
