@@ -9,6 +9,7 @@ const corsOptions = {
     origin: [
         'http://localhost:5173',
         'http://localhost:5174',
+        'https://knowledge-korner.web.app',
     ],
     credentials: true,
     optionSuccessStatus: 200,
@@ -78,6 +79,13 @@ async function run() {
             res.send(result)
         })
 
+        
+        // get wishlist by user
+        app.get('/wishlist', async (req, res) => {
+            const result = await wishlistCollection.find().toArray()
+            res.send(result)
+        })
+
         // Update blog
         app.put("/updateBlog/:id", async(req,res)=>{
             console.log(req.params.id)
@@ -117,4 +125,5 @@ app.get('/', (req, res) => {
 app.listen(port, () =>
     console.log(`Server running on port ${port}`)
 )
+
 
